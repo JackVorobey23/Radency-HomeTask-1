@@ -17,7 +17,7 @@ namespace HomeTask1
 
             metaLogData = new();
             
-            using (var writer = new StreamWriter(@"config.json", false))
+            using (var writer = new StreamWriter(@"./Configuration/config.json", false))
             {
                 writer.WriteLine(JsonSerializer.Serialize<Paths>(_config.paths));
             }

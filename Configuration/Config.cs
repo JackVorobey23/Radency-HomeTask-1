@@ -6,7 +6,7 @@ namespace HomeTask1
         public Paths paths;
         public void CreateOutputDirectory(string day)
         {
-            using (StreamWriter configWriter = new StreamWriter(@"config.json"))
+            using (StreamWriter configWriter = new StreamWriter(@"./Configuration/config.json"))
             {
                 string dir = paths.OutputPath.Substring(0, paths.OutputPath.Length - 10);
                 
@@ -21,7 +21,7 @@ namespace HomeTask1
         {
             string jsonString = "";
 
-            using (var jsonReader = new StreamReader(@"config.json"))
+            using (var jsonReader = new StreamReader(@"./Configuration/config.json"))
             {
                 jsonString = jsonReader.ReadToEnd();
             }

@@ -8,7 +8,7 @@ namespace HomeTask1
             Paths paths = new();
             string jsonString = "";
 
-            using (var jsonReader = new StreamReader(@"config.json"))
+            using (var jsonReader = new StreamReader(@"./Configuration/config.json"))
             {
                 jsonString = jsonReader.ReadToEnd();
             }

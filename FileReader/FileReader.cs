@@ -50,7 +50,7 @@ namespace HomeTask1
         {
             IReadingStrategy _strategy = null;
 
-            if(path.EndsWith("txt"))
+            if (path.EndsWith("txt"))
             {
                 _strategy = new ReadTxtStrategy(path);
             } 
@@ -78,14 +78,16 @@ namespace HomeTask1
             {
                 _config.CreateOutputDirectory(Day);
             }
+
             int count = Directory.GetFiles(_config.paths.OutputPath).Length + 1;
+
             StreamWriter outputWriter = new StreamWriter(_config.paths.OutputPath + "\\output" + count + ".json");
             outputWriter.Write(output);
             outputWriter.Close();
 
             
             _waiter.metaLogData.invalid_files = 
-            _waiter.metaLogData.invalid_files.Concat(fileMLD.invalid_files).ToList();
+                _waiter.metaLogData.invalid_files.Concat(fileMLD.invalid_files).ToList();
             
             _waiter.metaLogData.parsed_files += fileMLD.parsed_files;
             _waiter.metaLogData.parsed_lines += fileMLD.parsed_lines;
