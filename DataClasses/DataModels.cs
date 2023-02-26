@@ -11,13 +11,13 @@ namespace HomeTask1
     public class ServiceData
     {
         public string name {get;set;}
-        public List<Payer> payers {get; set;}
+        public List<Payer> payers {get; set;} = new();
         public decimal total {get;set;}
     }
     public class CityData
     {
         public string city {get;set;}
-        public List<ServiceData> services {get; set;}
+        public List<ServiceData> services {get; set;} = new();
         public decimal total {get;set;}
     }
 }

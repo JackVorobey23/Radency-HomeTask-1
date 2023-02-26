@@ -2,11 +2,6 @@ using CsvHelper;
 using System.Globalization;
 namespace HomeTask1
 {
-    public interface IReadingStrategy
-    {
-        Task<ProcessedFileInfo> Reading();
-        (CityData, bool) ConvertLineToJson(string line);
-    }
     class ReadTxtStrategy : IReadingStrategy
     {
         private string _path;
@@ -17,15 +12,15 @@ namespace HomeTask1
             _reader = new StreamReader(_path);
         }
         
-        async Task<ProcessedFileInfo> IReadingStrategy.Reading()
+        //async Task<ProcessedFileInfo> IReadingStrategy.Reading()
+        public ProcessedFileInfo Reading()
         {
-
             ProcessedFileInfo fileInfo = new();
             while(_reader.Peek() != -1)
             {
-                string line = await _reader.ReadLineAsync();
+                string line = _reader.ReadLine();
 
-                (CityData newCityData, bool isLineAvailable) = ConvertLineToJson(line);
+                (CityData newCityData, bool isLineAvailable) = LineToCityData(line);
 
                 
                 if(isLineAvailable)
@@ -44,7 +39,7 @@ namespace HomeTask1
 
             return fileInfo;
         }
-        public (CityData, bool) ConvertLineToJson(string line)
+        private (CityData, bool) LineToCityData(string line)
         {
             Payer payer = new();
             CityData cityData = new();
@@ -71,39 +66,12 @@ namespace HomeTask1
             {
                 return (null, false);
             }
+
+            serviceData.payers.Add(payer);
             
-            cityData.services = new();
             cityData.services.Add(serviceData);
             
-            serviceData.payers = new();
-            serviceData.payers.Add(payer);
-
             return (cityData, true);
         }
     }
-
-    class ReadCsvStrategy : IReadingStrategy
-    {
-        private CsvReader _csvReader;
-        private string _path;
-        public ReadCsvStrategy(string path)
-        {
-            _path = path;
-            StreamReader reader = new StreamReader(_path);
-            _csvReader = new CsvReader(reader, CultureInfo. InvariantCulture);
-            reader.Close();
-        }
-
-
-        async Task<ProcessedFileInfo> IReadingStrategy.Reading()
-        {
-            await _csvReader.ReadAsync();
-            string text = _csvReader.GetField("nam");
-            return new ProcessedFileInfo();
-        }
-        public (CityData, bool) ConvertLineToJson(string line)
-        {
-            throw new NotImplementedException();
-        }
-    }    
 }

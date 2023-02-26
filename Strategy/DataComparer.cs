@@ -1,7 +1,6 @@
-using System.Globalization;
 namespace HomeTask1
 {
-    class DataToJsonProcessor
+    class DataComparer
     {
         public List<CityData> CompareCityDatas(List<CityData> cityDatas)
         {
@@ -17,7 +16,6 @@ namespace HomeTask1
                 foreach (var city in group)
                 {
                     toAdd.services.Add(city.services[0]);
-                    toAdd.total++;
                 }
                 var tempServices = toAdd.services.GroupBy(s => s.name);
                 toAdd.services = new();
@@ -34,6 +32,7 @@ namespace HomeTask1
                     }
                     toAdd.services.Add(sToAdd);
                 }
+                toAdd.total = toAdd.services.Count();
                 resCityDatas.Add(toAdd);
             }
 

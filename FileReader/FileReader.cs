@@ -23,9 +23,12 @@ namespace HomeTask1
 
             MetaLogData metaLogData = new();
 
-            FilePaths.ForEach(async fP => 
+
+            //Task.Factory.StartNew (() => 
+            //Parallel.ForEach(FilePaths, fP => 
+            FilePaths.ForEach(fP => 
             {
-                var procFileData = await ExecuteReading(fP);
+                var procFileData = ExecuteReading(fP);
 
                 cityDataList = cityDataList.Concat(procFileData.cityDatas).ToList();
 
@@ -37,16 +40,20 @@ namespace HomeTask1
                 metaLogData.parsed_files++;
             });
 
-            DataToJsonProcessor processor = new();
+            DataComparer processor = new();
 
             string toWrite = JsonSerializer.Serialize<List<CityData>>(
                 processor.CompareCityDatas(cityDataList), new JsonSerializerOptions{WriteIndented = true}
                 );
 
             WriteOutput(toWrite, metaLogData);
-            System.Console.WriteLine(String.Join(',', cityDataList));
+            
+            System.Console.WriteLine(JsonSerializer.Serialize(
+                    metaLogData, new JsonSerializerOptions{WriteIndented = true}
+                    ));
         }
-        private async Task<ProcessedFileInfo> ExecuteReading(string path)
+        //private async Task<ProcessedFileInfo> ExecuteReading(string path)
+        private ProcessedFileInfo ExecuteReading(string path)
         {
             IReadingStrategy _strategy = null;
 
@@ -65,7 +72,7 @@ namespace HomeTask1
 
             var fileInfo = new ProcessedFileInfo();
 
-            fileInfo = await _strategy.Reading();
+            fileInfo = _strategy.Reading();
             
             return fileInfo;
         }

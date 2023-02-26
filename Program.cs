@@ -4,7 +4,8 @@ namespace HomeTask1
 {
     class Program
     {
-        static async Task Main(string[] args)
+        //static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
 
             Config config = new();
@@ -23,12 +24,13 @@ namespace HomeTask1
             var startCommand = new Command("read","read file");
             var stopCommand = new Command("stop","stop the program.");
 
-            
-            startCommand.SetHandler(()=> 
+            var StartFileReader = () => 
             {
                 FileReader reader = new FileReader(waiter, config);
                 reader.Start();
-            });
+            };
+
+            startCommand.SetHandler(StartFileReader);
 
             stopCommand.SetHandler(()=> 
             {
@@ -39,10 +41,18 @@ namespace HomeTask1
             rootCommand.AddCommand(startCommand);
             rootCommand.AddCommand(stopCommand);
 
-            await rootCommand.InvokeAsync(args);
+            WatcherConfig watcherConfig = new WatcherConfig(config);
+
+            var fileWatcher = watcherConfig.StartWatcher((s,e) => StartFileReader());
+
+
+            rootCommand.Invoke("--help");
 
             while(true)
-                await rootCommand.InvokeAsync(Console.ReadLine());
+            {
+                string command = Console.ReadLine();
+                rootCommand.Invoke(command);
+            }
         }
     }
 }
